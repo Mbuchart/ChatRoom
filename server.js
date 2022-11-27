@@ -1,11 +1,12 @@
-const express = require('express');
-const http = require('http');
+const express = require("express");
+const http = require("http");
 const app = express();
 const server = http.createServer(app);
-const socket = require('socket.io');
+const socket = require("socket.io");
 const io = socket(server);
 
 let users = [];
+
 let messages = {
     general: [],
     random: [],
@@ -13,15 +14,7 @@ let messages = {
     javascript: []
 };
 
-app.get("/", function(req, res) {
-    res.sendFile(__dirname + '/index.html');
-})
-
-server.listen(2000, function(){
-    console.log("server running on port 3000");
-});
-
-io.on('connection', socket => {
+io.on("connection", socket => {
     socket.on("join server", (username) => {
         const user = {
             username,
@@ -31,12 +24,12 @@ io.on('connection', socket => {
         io.emit("new user", users);
     });
 
-    socket.on("join room", (roomName, callBack) => {
+    socket.on("join room", (roomName, cb) => {
         socket.join(roomName);
-        callBack(messages[roomName]);
+        cb(messages[roomName]);
     });
 
-    socket.on("send message", ({content, to, sender, chatName, isChannel}) => {
+    socket.on("send message", ({ content, to, sender, chatName, isChannel }) => {
         if (isChannel) {
             const payload = {
                 content,
@@ -48,14 +41,14 @@ io.on('connection', socket => {
             const payload = {
                 content,
                 chatName: sender,
-                sender,
+                sender
             };
             socket.to(to).emit("new message", payload);
         }
-        if (message[chatName]) {
+        if (messages[chatName]) {
             messages[chatName].push({
                 sender,
-                content
+                content 
             });
         }
     });
@@ -65,3 +58,5 @@ io.on('connection', socket => {
         io.emit("new user", users);
     });
 });
+
+server.listen(1337, () => console.log("server running on port 1337"));

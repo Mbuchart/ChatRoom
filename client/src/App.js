@@ -15,7 +15,7 @@ const initialMessagesState = {
 function App() {
   const [username, setUsername] = useState("");
   const [connected, setConnected] = useState(false);
-  const [currentChat, setCurrentChat] = useState({isChannel: true, chatName: "general", receiverId: "" });
+  const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "general", receiverId: "" });
   const [connectedRooms, setConnectedRooms] = useState(["general"]);
   const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState(initialMessagesState);
@@ -27,7 +27,7 @@ function App() {
   };
 
   useEffect(() => {
-  setMessage("");
+    setMessage("");
   }, [messages]);
 
   function sendMessage() {
@@ -64,7 +64,7 @@ function App() {
     setConnectedRooms(newConnectedRooms);
   }
 
-  function toggleChat() {
+  function toggleChat(currentChat) {
     if (!messages[currentChat.chatName]) {
       const newMessages = immer(messages, draft => {
         draft[currentChat.chatName] = [];
@@ -82,7 +82,7 @@ function App() {
     setConnected(true);
     socketRef.current = io.connect("/");
     socketRef.current.emit("join server", username);
-    socketRef.current.emit("join room", "general", (messages) => roomJoinCallBack());
+    socketRef.current.emit("join room", "general", (messages) => roomJoinCallBack(messages, "general"));
     socketRef.current.on("new user", allUsers => {
       setAllUsers(allUsers);
     });

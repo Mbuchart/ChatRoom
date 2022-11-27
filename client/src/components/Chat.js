@@ -60,14 +60,14 @@ function Chat(props) {
         const currentChat = {
             chatName: room,
             isChannel: true,
-            receiverId: ","
+            receiverId: "",
         }
         return (
             <Row onClick={() => props.toggleChat(currentChat)} key={room}>
                 {room}
             </Row>
         );
-    }
+    } 
 
     function renderUser(user) {
         if (user.id === props.yourId) {
@@ -78,7 +78,7 @@ function Chat(props) {
             );
         }
         const currentChat = {
-            chatname: user.username,
+            chatName: user.username,
             isChannel: false,
             receiverId: user.id,
         }
@@ -109,7 +109,7 @@ function Chat(props) {
         );
     } else {
         body = (
-            <button onClick={() => props.joinRoom(props.currentChat.chatName)} >Join {props.activeChannel}</button>
+            <button onClick={() => props.joinRoom(props.currentChat.chatName)} >Join {props.currentChat.chatName}</button>
         );
     }
 
