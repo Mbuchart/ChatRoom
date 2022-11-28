@@ -61,6 +61,8 @@ function Chat(props) {
             chatName: room,
             isChannel: true,
             receiverId: "",
+            isUser: false,
+            isBlocked: props.currentChat.isBlocked,
         }
         return (
             <Row onClick={() => props.toggleChat(currentChat)} key={room}>
@@ -81,6 +83,8 @@ function Chat(props) {
             chatName: user.username,
             isChannel: false,
             receiverId: user.id,
+            isUser: true,
+            isBlocked: props.currentChat.isBlocked,
         }
         return (
             <Row onClick={() => {
@@ -97,6 +101,47 @@ function Chat(props) {
                 <h3>{message.sender}</h3>
                 <p>{message.content}</p>
             </div>
+        );
+    }
+
+    let block;
+    if (props.currentChat.isUser && !props.currentChat.isBlocked) {
+        const currentChat = {
+            chatName: props.currentChat.chatName,
+            isChannel: props.currentChat.isChannel,
+            receiverId: props.currentChat.receiverId,
+            isUser: props.currentChat.isUser,
+            isBlocked: true,
+        }
+        block = (    
+            <ChannelInfo>
+                {props.currentChat.chatName}
+                <Row onClick={() => {
+                props.toggleChat(currentChat);
+                }}>block?</Row>
+            </ChannelInfo>
+        );
+    } else if (!props.currentChat.isUser) {
+        block = (    
+            <ChannelInfo>
+                {props.currentChat.chatName}
+            </ChannelInfo>
+        );
+    } else {
+        const currentChat = {
+            chatName: props.currentChat.chatName,
+            isChannel: props.currentChat.isChannel,
+            receiverId: props.currentChat.receiverId,
+            isUser: props.currentChat.isUser,
+            isBlocked: false,
+        }
+        block = (    
+            <ChannelInfo>
+                {props.currentChat.chatName}
+                <Row onClick={() => {
+                props.toggleChat(currentChat);
+                }}>unblock?</Row>
+            </ChannelInfo>
         );
     }
 
@@ -128,9 +173,7 @@ function Chat(props) {
                 {props.allUsers.map(renderUser)}
             </SideBar>
             <ChatPanel>
-                <ChannelInfo>
-                    {props.currentChat.chatName}
-                </ChannelInfo>
+                    {block}
                 <BodyContainer>
                     {body}
                 </BodyContainer>

@@ -15,7 +15,7 @@ const initialMessagesState = {
 function App() {
   const [username, setUsername] = useState("");
   const [connected, setConnected] = useState(false);
-  const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "general", receiverId: "" });
+  const [currentChat, setCurrentChat] = useState({ isChannel: true, chatName: "general", receiverId: "", isUser: false, isBlocked: false });
   const [connectedRooms, setConnectedRooms] = useState(["general"]);
   const [allUsers, setAllUsers] = useState([]);
   const [messages, setMessages] = useState(initialMessagesState);
@@ -49,10 +49,10 @@ function App() {
   }
 
   function roomJoinCallBack(incomingMessages, room) {
-    const newMessages = immer(messages, draft => {
-      draft[room] = incomingMessages;
-    });
-    setMessages(newMessages);
+      const newMessages = immer(messages, draft => {
+        draft[room] = incomingMessages;
+      });
+      setMessages(newMessages);
   }
 
   function joinRoom(room) {
@@ -65,6 +65,7 @@ function App() {
   }
 
   function toggleChat(currentChat) {
+    console.log(currentChat.isBlocked + " is blocked in toggle chat");
     if (!messages[currentChat.chatName]) {
       const newMessages = immer(messages, draft => {
         draft[currentChat.chatName] = [];
